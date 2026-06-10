@@ -36,7 +36,7 @@ h1, h2, h3 {
 /* ═══════════════════ NAV ═══════════════════ */
 nav {
   position: fixed; top: 0; width: 100%; z-index: 1000;
-  padding: 20px 48px;
+  padding: 20px 50px;
   display: flex; align-items: center; justify-content: space-between;
   background: linear-gradient(to bottom, rgba(15,8,32,0.95), transparent);
   backdrop-filter: blur(8px);
@@ -221,39 +221,15 @@ h1.hero-title {
   font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700;
   line-height: 1.15; margin-bottom: 24px;
 }
-.section-title em { color: var(--gold); }
+.section-title em { color: var(--gold); font-style: normal; }
 
 .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; max-width: 1200px; margin: 0 auto; align-items: center; }
 .about-text p { font-family: 'Inter', sans-serif; font-size: 1.15rem; color: rgba(255,255,255,0.75); line-height: 1.9; margin-bottom: 20px; }
 
 .owners-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 40px; }
 .owner-card {
-  background: rgba(74,44,138,0.2); border: 1px solid rgba(123,94,167,0.25);
-  border-radius: 12px; padding: 24px 20px; text-align: center;
-  transition: transform 0.3s, border-color 0.3s;
+  background: rgba(74,44,138,0.2); border: 1px solid var(--border); padding: 20px; border-radius: 8px;
 }
-.owner-card:hover { transform: translateY(-4px); border-color: rgba(245,185,66,0.4); }
-.owner-avatar {
-  width: 64px; height: 64px; border-radius: 50%; margin: 0 auto 12px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem;
-  background: linear-gradient(135deg, var(--purple-mid), var(--purple-light));
-  border: 2px solid var(--gold);
-}
-.owner-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 4px; }
-.owner-role { font-size: 0.72rem; color: var(--coral); letter-spacing: 0.1em; text-transform: uppercase; }
-
-.about-features { display: flex; flex-direction: column; gap: 20px; }
-.feat-row {
-  display: flex; align-items: flex-start; gap: 18px;
-  padding: 20px 24px; border-radius: 12px;
-  background: rgba(74,44,138,0.15); border: 1px solid rgba(123,94,167,0.2);
-  transition: background 0.3s;
-}
-.feat-row:hover { background: rgba(74,44,138,0.3); }
-.feat-icon { font-size: 1.8rem; flex-shrink: 0; }
-.feat-row h4 { font-size: 0.95rem; font-weight: 500; margin-bottom: 4px; }
-.feat-row p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
 
 /* ═══════════════════ MENU ═══════════════════ */
 #menu {
@@ -267,7 +243,48 @@ h1.hero-title {
 }
 
 .menu-wrapper { max-width: 1200px; margin: 0 auto; position: relative; }
-.menu-header { text-align: center; margin-bottom: 60px; }
+
+/* Modified to act as a wrapper for our centered text+image grid block */
+.menu-header { 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center; 
+  margin-bottom: 60px; 
+}
+
+/* NEW: Horizontal flex container binding your text and QR together smoothly */
+.heading-qr-container {
+  display: inline-flex;  /* Restricts container expansion width to match items precisely */
+  align-items: center;   /* Perfectly centers the middle axes of text lines and QR graphic */
+  gap: 80px;             /* Creates clean spatial separation between title and QR image */
+  margin-top: 12px;
+}
+
+/* NEW: Heading selector override that stops native blocking or forced wrapping updates */
+.menu-header .section-title {
+  margin-bottom: 0;      /* Disables bottom margins so it balances next to the image */
+}
+
+.menu-header-qr {
+  width: 65px;
+  height: 65px;
+  object-fit: contain;
+  border-radius: 12px;
+  padding: 4px;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.menu-header-qr:hover {
+  transform: translateY(-2px) scale(3);
+  border-color: var(--gold);     
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+}
+
 
 .menu-tabs {
   display: flex; justify-content: center; gap: 8px;
@@ -290,29 +307,77 @@ h1.hero-title {
 .menu-cat.active { display: contents; }
 
 .mcard {
-  background: var(--surface);
-  border: 1px solid var(--border);
+  position: relative; 
+  overflow: hidden; 
+  border: none;
+  box-shadow: inset 0 0 0 1.5px var(--border); 
   border-radius: 12px;
-  padding: 20px;
-  transition: 0.25s;
+  padding: 24px;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.25s, box-shadow 0.25s;
 }
+
 .mcard::before {
-  content: ''; position: absolute; top: 0; right: 0;
-  width: 80px; height: 80px;
-  background: radial-gradient(circle, rgba(245,185,66,0.08), transparent);
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1;
+  transition: background 0.25s, opacity 0.25s; 
 }
-.mcard:hover { transform: translateY(-4px); border-color: var(--accent); }
 
-.mcard-emoji { font-size: 2.2rem; margin-bottom: 14px; display: block; }
-.mcard-name { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 8px; }
-.mcard-desc { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px; }
-.mcard-price { font-size: 1rem; color: var(--gold); font-weight: 500; }
+.mcard:hover {
+  transform: translateY(-4px);
+  box-shadow: inset 0 0 0 1px var(--accent), 0 12px 30px rgba(0, 0, 0, 0.7); 
+}
+
+.mcard:hover::before {
+  background: rgba(0, 0, 0, 0.1); 
+}
+
+.mcard-badge,
+.mcard-name,
+.mcard-desc,
+.mcard-price {
+  font-family: 'Inter', sans-serif;
+  position: relative;
+  z-index: 2;
+  text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+.mcard-name { font-weight: 700; }
+
 .mcard-badge {
-  position: absolute; top: 16px; right: 16px;
-  background: var(--coral); color: #fff; font-size: 0.6rem;
-  padding: 3px 8px; border-radius: 100px; letter-spacing: 0.1em; text-transform: uppercase;
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: var(--coral);
+  color: #fff;
+  font-size: 0.6rem;
+  padding: 3px 8px;
+  border-radius: 100px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.mcard-desc {
+  font-size: 0.85rem;
+  color: #e2e8f0;
 }
 
+/* ═════════ RESPONSIVE SMARTPHONE OVERRIDE ═════════ */
+@media (max-width: 600px) {
+  .heading-qr-container {
+    flex-direction: column; /* Softly rolls the QR code cleanly under the text on small phone monitors */
+    gap: 16px;
+  }
+}
 /* ═══════════════════ EVENTS ═══════════════════ */
 #events {
   padding: 120px 48px;
@@ -467,7 +532,7 @@ h1.hero-title {
 .info-row { display: flex; align-items: center; gap: 14px; }
 .info-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1.1rem; background: rgba(74,44,138,0.3); border: 1px solid rgba(123,94,167,0.2); flex-shrink: 0; }
 .info-row p { font-size: 0.88rem; color: var(--text-light); line-height: 1.5; }
-.info-row p strong { color: #fff; display: block; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; color: var(--text-muted); }
+.info-row p strong { color: var(--gold); display: block; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
 
 .reserve-form {
   background: rgba(45,27,105,0.2); border: 1px solid rgba(123,94,167,0.25);
@@ -664,7 +729,7 @@ footer {
 <!-- ══ NAV ══ -->
 <nav id="navbar">
   <a class="nav-logo" href="/">
-    <img src="assets/logo.png" style="height:80px;">
+    <img src="assets/logo.png" style="height:70px;">
   </a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
@@ -769,21 +834,21 @@ footer {
         </div>
       </div>
       <div class="feat-row">
-        <div class="feat-icon">🛋️</div>
+        <div class="feat-icon"></div>
         <div>
           <h4>Lounge Ambience</h4>
           <p>Warm lighting, cozy seating, and an atmosphere that invites you to stay a little longer.</p>
         </div>
       </div>
       <div class="feat-row">
-        <div class="feat-icon">🎉</div>
+        <div class="feat-icon"></div>
         <div>
           <h4>Private Event Space</h4>
           <p>Host your birthday, anniversary, or corporate event in our private dining area with customized setups.</p>
         </div>
       </div>
       <div class="feat-row">
-        <div class="feat-icon">🚀</div>
+        <div class="feat-icon"></div>
         <div>
           <h4>Fast Delivery Too</h4>
           <p>Can't make it in? Order online via Zomato or Swiggy and we'll bring the cafe to your door.</p>
@@ -798,57 +863,54 @@ footer {
   <div class="menu-wrapper">
     <div class="menu-header fade-in">
       <div class="section-label">What We Serve</div>
-      <h2 class="section-title">Our <em>Signature</em> Menu</h2>
+      <div class="heading-qr-container">
+        <h2 class="section-title">Our <em>Signature</em> Menu</h2>
+        <img src="assets/qr-code.png" alt="QR Code to Menu" class="menu-header-qr">
+      </div>
     </div>
 
     <div class="menu-tabs">
-      <button class="mtab active" onclick="switchTab('starters')">🍟 Starters</button>
-      <button class="mtab" onclick="switchTab('mains')">🍛 Mains</button>
-      <button class="mtab" onclick="switchTab('chinese')">🥢 Chinese</button>
-      <button class="mtab" onclick="switchTab('pizza')">🍕 Pizza & Burgers</button>
-      <button class="mtab" onclick="switchTab('drinks')">🥤 Drinks & Shakes</button>
+      <button class="mtab active" onclick="switchTab('starters')">Starters</button>
+      <button class="mtab" onclick="switchTab('mains')">Mains</button>
+      <button class="mtab" onclick="switchTab('chinese')">Chinese</button>
+      <button class="mtab" onclick="switchTab('pizza')">Pizza & Burgers</button>
+      <button class="mtab" onclick="switchTab('drinks')">Drinks & Shakes</button>
     </div>
 
     <div class="menu-grid">
       <!-- STARTERS -->
       <div class="menu-cat active" id="cat-starters">
-        <div class="mcard fade-in">
+        <div class="mcard fade-in" style="background-image: url('assets/starters1.jpg')">
           <div class="mcard-badge">Popular</div>
-          <span class="mcard-emoji">🥟</span>
           <div class="mcard-name">Crispy Veg Momos</div>
           <div class="mcard-desc">Steamed dumplings with a golden crispy crust, served with fiery red chutney</div>
-          <div class="mcard-price">₹149</div>
+          <!--<div class="mcard-price">₹149</div>-->
         </div>
-        <div class="mcard fade-in">
-          <span class="mcard-emoji">🍗</span>
+        <div class="mcard fade-in" style="background-image: url('assets/starters2.jpg')">
           <div class="mcard-name">Tandoori Chicken Wings</div>
           <div class="mcard-desc">Marinated overnight in yoghurt & spices, char-grilled to smoky perfection</div>
-          <div class="mcard-price">₹249</div>
+          <!--<div class="mcard-price">₹249</div>-->
         </div>
-        <div class="mcard fade-in">
+        <div class="mcard fade-in" style="background-image: url('assets/starters3.jpg')">
           <div class="mcard-badge">Chef's Pick</div>
-          <span class="mcard-emoji">🥙</span>
           <div class="mcard-name">Paneer Tikka Roll</div>
           <div class="mcard-desc">Soft cottage cheese tikka wrapped in a flaky paratha with mint chutney</div>
-          <div class="mcard-price">₹199</div>
+          <!--<div class="mcard-price">₹199</div>-->
         </div>
-        <div class="mcard fade-in">
-          <span class="mcard-emoji">🍖</span>
+        <div class="mcard fade-in" style="background-image: url('assets/starters4.jpg')">
           <div class="mcard-name">Chicken Seekh Kebab</div>
           <div class="mcard-desc">Minced chicken with aromatic spices, charcoal grilled & served sizzling</div>
-          <div class="mcard-price">₹279</div>
+          <!-- <div class="mcard-price">₹279</div> -->
         </div>
-        <div class="mcard fade-in">
-          <span class="mcard-emoji">🧅</span>
+        <div class="mcard fade-in" style="background-image: url('assets/starters5.jpg')">
           <div class="mcard-name">Crispy Onion Rings</div>
           <div class="mcard-desc">Beer-battered golden rings with garlic aioli and chipotle dip</div>
-          <div class="mcard-price">₹129</div>
+          <!-- <div class="mcard-price">₹129</div> -->
         </div>
-        <div class="mcard fade-in">
-          <span class="mcard-emoji">🥗</span>
+        <div class="mcard fade-in" style="background-image: url('assets/starters6.jpg')">
           <div class="mcard-name">Nachos Grande</div>
           <div class="mcard-desc">Loaded tortilla chips with salsa, sour cream, jalapeños & cheese dip</div>
-          <div class="mcard-price">₹229</div>
+          <!-- <div class="mcard-price">₹229</div> -->
         </div>
       </div>
 
@@ -856,41 +918,41 @@ footer {
       <div class="menu-cat" id="cat-mains">
         <div class="mcard">
           <div class="mcard-badge">Bestseller</div>
-          <span class="mcard-emoji">🍛</span>
+          <div class="mcard fade-in" style="background-image: url('assets/mains1.jpg')">
           <div class="mcard-name">Butter Chicken Masala</div>
           <div class="mcard-desc">Slow-cooked chicken in rich tomato-cream gravy, pairs perfectly with naan</div>
-          <div class="mcard-price">₹329</div>
+          <!-- <div class="mcard-price">₹329</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🐔</span>
+          <div class="mcard fade-in" style="background-image: url('assets/mains2.jpg')">
           <div class="mcard-name">Handi Chicken</div>
           <div class="mcard-desc">Slow-cooked in a clay pot with whole spices and caramelized onions</div>
-          <div class="mcard-price">₹349</div>
+          <!-- <div class="mcard-price">₹349</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🫕</span>
+          <div class="mcard fade-in" style="background-image: url('assets/mains3.jpg')">
           <div class="mcard-name">Chicken Kolhapuri</div>
           <div class="mcard-desc">Fiery Maharashtrian preparation with a blend of bold whole spices</div>
-          <div class="mcard-price">₹359</div>
+          <!-- <div class="mcard-price">₹359</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🥚</span>
+          <div class="mcard fade-in" style="background-image: url('assets/mains4.jpg')">
           <div class="mcard-name">Egg Curry</div>
           <div class="mcard-desc">Classic hard-boiled eggs in a tangy, spiced onion-tomato gravy</div>
-          <div class="mcard-price">₹199</div>
+          <!-- <div class="mcard-price">₹199</div> -->
         </div>
         <div class="mcard">
-          <div class="mcard-badge">Veg Special</div>
+          <div class="mcard fade-in" style="background-image: url('assets/mains5.jpg')">
           <span class="mcard-emoji">🧆</span>
           <div class="mcard-name">Paneer Lababdar</div>
           <div class="mcard-desc">Cottage cheese cubes in a luscious, mildly spiced creamy tomato sauce</div>
-          <div class="mcard-price">₹299</div>
+          <!-- <div class="mcard-price">₹299</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🍚</span>
+          <div class="mcard fade-in" style="background-image: url('assets/mains6.jpg')">
           <div class="mcard-name">Biryani (Chicken / Veg)</div>
           <div class="mcard-desc">Fragrant basmati rice layered with slow-cooked meat or veggies & whole spices</div>
-          <div class="mcard-price">₹279 / ₹229</div>
+          <!-- <div class="mcard-price">₹279 / ₹229</div> -->
         </div>
       </div>
 
@@ -898,41 +960,41 @@ footer {
       <div class="menu-cat" id="cat-chinese">
         <div class="mcard">
           <div class="mcard-badge">Hot Pick</div>
-          <span class="mcard-emoji">🍜</span>
+          <div class="mcard fade-in" style="background-image: url('assets/chinese1.jpg')">
           <div class="mcard-name">Lemon Chicken</div>
           <div class="mcard-desc">Crispy fried chicken tossed in a tangy lemon-garlic sauce, with or without bone</div>
-          <div class="mcard-price">₹299</div>
+          <!-- <div class="mcard-price">₹299</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🥡</span>
+          <div class="mcard fade-in" style="background-image: url('assets/chinese2.jpg')">
           <div class="mcard-name">Hakka Noodles</div>
           <div class="mcard-desc">Wok-tossed noodles with vegetables or chicken in a savory soy-ginger sauce</div>
-          <div class="mcard-price">₹189 / ₹249</div>
+          <!-- <div class="mcard-price">₹189 / ₹249</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🍲</span>
+          <div class="mcard fade-in" style="background-image: url('assets/chinese3.jpg')">
           <div class="mcard-name">Fried Rice</div>
           <div class="mcard-desc">Wok-fried with egg, spring onion & house seasoning, perfectly smoky</div>
-          <div class="mcard-price">₹179 / ₹239</div>
+          <!-- <div class="mcard-price">₹179 / ₹239</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🥢</span>
+          <div class="mcard fade-in" style="background-image: url('assets/chinese4.jpg')">
           <div class="mcard-name">Chilli Chicken</div>
           <div class="mcard-desc">Indo-Chinese classic — crispy chicken in a bold chilli-garlic-soy glaze</div>
-          <div class="mcard-price">₹269</div>
+          <!-- <div class="mcard-price">₹269</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🥟</span>
+          <div class="mcard fade-in" style="background-image: url('assets/chinese5.jpg')">
           <div class="mcard-name">Chicken Momos (Steamed/Fried)</div>
           <div class="mcard-desc">Juicy chicken-filled dumplings served with our signature schezwan dip</div>
-          <div class="mcard-price">₹169</div>
+          <!-- <div class="mcard-price">₹169</div> -->
         </div>
         <div class="mcard">
           <div class="mcard-badge">Veg</div>
-          <span class="mcard-emoji">🥦</span>
+          <div class="mcard fade-in" style="background-image: url('assets/chinese6.jpg')">
           <div class="mcard-name">Manchurian</div>
           <div class="mcard-desc">Crispy veggie balls in a dark, peppery manchurian sauce — dry or gravy</div>
-          <div class="mcard-price">₹199</div>
+          <!-- <div class="mcard-price">₹199</div> -->
         </div>
       </div>
 
@@ -940,41 +1002,41 @@ footer {
       <div class="menu-cat" id="cat-pizza">
         <div class="mcard">
           <div class="mcard-badge">Bestseller</div>
-          <span class="mcard-emoji">🍕</span>
+          <div class="mcard fade-in" style="background-image: url('assets/pizza1.jpg')">
           <div class="mcard-name">BBQ Chicken Pizza</div>
           <div class="mcard-desc">Smoky BBQ base, tender chicken, caramelized onions & mozzarella</div>
-          <div class="mcard-price">₹349</div>
+          <!-- <div class="mcard-price">₹349</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🍕</span>
+          <div class="mcard fade-in" style="background-image: url('assets/pizza2.jpg')">
           <div class="mcard-name">Margherita Supreme</div>
           <div class="mcard-desc">Classic san marzano tomato, fresh basil & stretchy mozzarella</div>
-          <div class="mcard-price">₹249</div>
+          <!-- <div class="mcard-price">₹249</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🍔</span>
+          <div class="mcard fade-in" style="background-image: url('assets/pizza3.jpg')">
           <div class="mcard-name">Three Guys Special Burger</div>
           <div class="mcard-desc">Double-stacked patty, caramelized onions, special sauce & crispy fries</div>
-          <div class="mcard-price">₹289</div>
+          <!-- <div class="mcard-price">₹289</div> -->
         </div>
         <div class="mcard">
           <div class="mcard-badge">Spicy</div>
-          <span class="mcard-emoji">🌶️</span>
+          <div class="mcard fade-in" style="background-image: url('assets/pizza4.jpg')">    
           <div class="mcard-name">Spicy Chicken Burger</div>
           <div class="mcard-desc">Crispy fried chicken fillet with jalapeños, coleslaw & sriracha mayo</div>
-          <div class="mcard-price">₹249</div>
+          <!-- <div class="mcard-price">₹249</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🍕</span>
+          <div class="mcard fade-in" style="background-image: url('assets/pizza5.jpg')">
           <div class="mcard-name">Paneer Tikka Pizza</div>
           <div class="mcard-desc">Desi twist on a classic — tikka-spiced paneer over a creamy makhani base</div>
-          <div class="mcard-price">₹319</div>
+          <!-- <div class="mcard-price">₹319</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🍟</span>
+          <div class="mcard fade-in" style="background-image: url('assets/pizza6.jpg')">
           <div class="mcard-name">Loaded Cheese Fries</div>
           <div class="mcard-desc">Crispy fries smothered in cheese sauce, jalapeños & crumbled bacon</div>
-          <div class="mcard-price">₹179</div>
+          <!-- <div class="mcard-price">₹179</div> -->
         </div>
       </div>
 
@@ -982,40 +1044,40 @@ footer {
       <div class="menu-cat" id="cat-drinks">
         <div class="mcard">
           <div class="mcard-badge">Favourite</div>
-          <span class="mcard-emoji">🥤</span>
+          <div class="mcard fade-in" style="background-image: url('assets/drinks1.jpg')">
           <div class="mcard-name">Three Guys Special Shake</div>
           <div class="mcard-desc">Our signature thick shake — a secret recipe blend of fruits, cream & magic</div>
-          <div class="mcard-price">₹199</div>
+          <!-- <div class="mcard-price">₹199</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🍓</span>
+          <div class="mcard fade-in" style="background-image: url('assets/drinks2.jpg')">
           <div class="mcard-name">Berry Blast</div>
           <div class="mcard-desc">Mixed berry smoothie with strawberry ice cream, mint & a sugar rim</div>
-          <div class="mcard-price">₹179</div>
+          <!-- <div class="mcard-price">₹179</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">☕</span>
+          <div class="mcard fade-in" style="background-image: url('assets/drinks3.jpg')">
           <div class="mcard-name">Cold Coffee</div>
           <div class="mcard-desc">Frothy chilled coffee with a scoop of vanilla ice cream, just right</div>
-          <div class="mcard-price">₹149</div>
+          <!-- <div class="mcard-price">₹149</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🧋</span>
+          <div class="mcard fade-in" style="background-image: url('assets/drinks4.jpg')">
           <div class="mcard-name">Oreo Milkshake</div>
           <div class="mcard-desc">Crushed Oreos, vanilla milk & whipped cream — the crowd's all-time favourite</div>
-          <div class="mcard-price">₹169</div>
+          <!-- <div class="mcard-price">₹169</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🍋</span>
+          <div class="mcard fade-in" style="background-image: url('assets/drinks5.jpg')">
           <div class="mcard-name">Virgin Mojito</div>
           <div class="mcard-desc">Freshly muddled mint & lime, soda, crushed ice — refreshing every sip</div>
-          <div class="mcard-price">₹129</div>
+          <!-- <div class="mcard-price">₹129</div> -->
         </div>
         <div class="mcard">
-          <span class="mcard-emoji">🫖</span>
+          <div class="mcard fade-in" style="background-image: url('assets/drinks6.jpg')">
           <div class="mcard-name">Masala Chai</div>
           <div class="mcard-desc">The ultimate comfort — aromatic ginger-cardamom chai served piping hot</div>
-          <div class="mcard-price">₹59</div>
+          <!-- <div class="mcard-price">₹59</div> -->
         </div>
       </div>
     </div>
@@ -1075,33 +1137,13 @@ footer {
     </div>
 
     <div class="events-cta fade-in">
-      <h3>Planning Something Special? 🎉</h3>
+      <h3>Planning Something Special?</h3>
       <p>Get in touch and we'll craft a customized experience just for you — decor, menu & more.</p>
       <a href="#reserve" class="btn-primary">Plan Your Event</a>
     </div>
   </div>
 </section>
 
-<!-- ══ GALLERY ══ -->
-<section id="gallery">
-  <div class="gallery-wrapper">
-    <div class="gallery-header fade-in">
-      <div class="section-label">The Vibe</div>
-      <h2 class="section-title">Inside Three <em>Guys</em></h2>
-    </div>
-
-    <div class="gallery-masonry">
-      <div class="gitem g1 ga"><span>🍕</span><div class="goverlay">Our Signature Pizzas</div></div>
-      <div class="gitem g2 gb"><span>🍔</span><div class="goverlay">Gourmet Burgers</div></div>
-      <div class="gitem g3 gc"><span>🥤</span><div class="goverlay">Fresh Shakes</div></div>
-      <div class="gitem g4 gd"><span>🛋️</span><div class="goverlay">Lounge Area</div></div>
-      <div class="gitem g5 ge"><span>🎂</span><div class="goverlay">Birthday Setup</div></div>
-      <div class="gitem g6 gf"><span>🍜</span><div class="goverlay">Chinese Specialties</div></div>
-      <div class="gitem g7 gg"><span>🌙</span><div class="goverlay">Night Ambience</div></div>
-      <div class="gitem g8 gh"><span>🥟</span><div class="goverlay">Momos & Starters</div></div>
-    </div>
-  </div>
-</section>
 
 <!-- ══ REVIEWS ══ -->
 <section id="reviews">
@@ -1205,96 +1247,100 @@ footer {
   <div class="reserve-wrapper">
     <div class="reserve-info fade-in">
       <div class="section-label">Book Your Spot</div>
-      <h2>Reserve Your <em style="color:var(--gold);font-style:italic;font-family:'Playfair Display',serif;">Table</em></h2>
+      <h2>Reserve Your <em style="color:var(--gold);font-style:normal;font-family:'Playfair Display',serif;">Table</em></h2>
       <p>Planning a visit? Reserve in advance and we'll make sure your table is ready and waiting — especially for special occasions.</p>
 
       <div class="info-rows">
         <div class="info-row">
-          <div class="info-icon">📍</div>
           <p><strong>Address</strong>177, Sachin Plaza, Model Town West, G.T. Road, Ghaziabad, UP 201001</p>
         </div>
         <div class="info-row">
-          <div class="info-icon">⏰</div>
           <p><strong>Hours</strong>11:00 AM – 11:00 PM, All Days</p>
         </div>
         <div class="info-row">
-          <div class="info-icon">📞</div>
           <p><strong>Phone / WhatsApp</strong>+91 XXXXX XXXXX</p>
         </div>
         <div class="info-row">
-          <div class="info-icon">🛵</div>
           <p><strong>Also Available On</strong>Zomato & Swiggy for delivery and dine-out booking</p>
         </div>
       </div>
     </div>
 
     <div class="reserve-form fade-in">
-      <h3>Make a Reservation</h3>
-      <div id="formError" style="color: var(--coral); font-size: 0.85rem; margin-bottom: 16px; display: none;"></div>
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" placeholder="Your name" id="fullName" required>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Phone Number</label>
-          <input type="tel" placeholder="+91 XXXXX XXXXX" id="phoneNumber" required>
-        </div>
-        <div class="form-group">
-          <label>Guests</label>
-          <select id="guests" required>
-            <option value="">Select number of guests</option>
-            <option>1 – 2 Guests</option>
-            <option>3 – 4 Guests</option>
-            <option>5 – 8 Guests</option>
-            <option>9 – 15 Guests</option>
-            <option>16+ (Private Event)</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group">
-          <label>Date</label>
-          <input type="date" id="dateInput" required>
-        </div>
-        <div class="form-group">
-          <label>Time</label>
-          <select id="timeInput" required>
-            <option value="">Select time</option>
-            <option>11:00 AM</option>
-            <option>12:00 PM</option>
-            <option>1:00 PM</option>
-            <option>2:00 PM</option>
-            <option>5:00 PM</option>
-            <option>6:00 PM</option>
-            <option>7:00 PM</option>
-            <option>8:00 PM</option>
-            <option>9:00 PM</option>
-            <option>10:00 PM</option>
-          </select>
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Occasion</label>
-        <select id="occasion" required>
-          <option value="">Select an occasion</option>
-          <option>Just Dining</option>
-          <option>Birthday Party</option>
-          <option>Anniversary</option>
-          <option>Bachelor / Bachelorette</option>
-          <option>Corporate Event</option>
-          <option>Family Get-Together</option>
-          <option>Night Out</option>
-          <option>Other</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Special Requests (Optional)</label>
-        <textarea placeholder="Any dietary requirements, decorations, or special arrangements?"></textarea>
-      </div>
-      <button class="submit-btn" onclick="handleReservation()">Confirm Reservation →</button>
+  <h3>Make a Reservation</h3>
+  <div id="formError" style="color: var(--coral); font-size: 0.85rem; margin-bottom: 16px; display: none;"></div>
+  
+  <div class="form-group">
+    <label>Full Name</label>
+    <input type="text" placeholder="Your name" id="fullName" required>
+  </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label>Phone Number</label>
+      <!-- Integrated real-time space formatting as the user types -->
+      <input type="tel" placeholder="+91 XXXXX XXXXX" id="phoneNumber" oninput="formatPhoneLive(this)" maxlength="16" required>
+    </div>
+    
+    <div class="form-group">
+      <label>Guests</label>
+      <select id="guests" required>
+        <option value="">Select number of guests</option>
+        <option>1 – 2 Guests</option>
+        <option>3 – 4 Guests</option>
+        <option>5 – 8 Guests</option>
+        <option>9 – 15 Guests</option>
+        <option>16+ (Private Event)</option>
+      </select>
     </div>
   </div>
+  
+  <div class="form-row">
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" id="dateInput" required>
+    </div>
+    <div class="form-group">
+      <label>Time</label>
+      <select id="timeInput" required>
+        <option value="">Select time</option>
+        <option>11:00 AM</option>
+        <option>12:00 PM</option>
+        <option>1:00 PM</option>
+        <option>2:00 PM</option>
+        <option>5:00 PM</option>
+        <option>6:00 PM</option>
+        <option>7:00 PM</option>
+        <option>8:00 PM</option>
+        <option>9:00 PM</option>
+        <option>10:00 PM</option>
+      </select>
+    </div>
+  </div>
+  
+  <div class="form-group">
+    <label>Occasion</label>
+    <select id="occasion" required>
+      <option value="">Select an occasion</option>
+      <option>Just Dining</option>
+      <option>Birthday Party</option>
+      <option>Anniversary</option>
+      <option>Bachelor / Bachelorette</option>
+      <option>Corporate Event</option>
+      <option>Family Get-Together</option>
+      <option>Night Out</option>
+      <option>Other</option>
+    </select>
+  </div>
+  
+  <div class="form-group">
+    <label>Special Requests (Optional)</label>
+    <textarea placeholder="Any dietary requirements, decorations, or special arrangements?"></textarea>
+  </div>
+  
+  <button class="submit-btn" onclick="handleReservation()">Confirm Reservation →</button>
+</div>
+</div>
 </section>
 
 <!-- ══ INSTAGRAM ══ -->
@@ -1306,79 +1352,52 @@ footer {
       <div class="insta-sub">Follow us on Instagram for daily specials, event highlights & behind-the-scenes moments</div>
     </div>
 
-    <div class="insta-grid">
-      <div class="ipost ia"><span>🍕</span><div class="ioverlay">View Post</div></div>
-      <div class="ipost ib"><span>🎂</span><div class="ioverlay">View Post</div></div>
-      <div class="ipost ic"><span>🥤</span><div class="ioverlay">View Post</div></div>
-      <div class="ipost id"><span>🍔</span><div class="ioverlay">View Post</div></div>
-      <div class="ipost ie"><span>🥟</span><div class="ioverlay">View Post</div></div>
-      <div class="ipost if"><span>🌙</span><div class="ioverlay">View Post</div></div>
+    <!-- 1. Added data-behold-id attribute to your grid wrapper to hook the live photos -->
+    <div class="insta-grid" data-behold-id="OVOMsdQCF5ugbAaaXx8C">
+      
+      <!-- Emojis removed. Links are automatically generated by the script inside your divs -->
+      <div class="ipost ia"><div class="ioverlay">View Post</div></div>
+      <div class="ipost ib"><div class="ioverlay">View Post</div></div>
+      <div class="ipost ic"><div class="ioverlay">View Post</div></div>
+      <div class="ipost id"><div class="ioverlay">View Post</div></div>
+      <div class="ipost ie"><div class="ioverlay">View Post</div></div>
+      <div class="ipost if"><div class="ioverlay">View Post</div></div>
     </div>
 
     <a href="https://www.instagram.com/threeguys_cafe_lounge/" target="_blank" class="insta-link">
-      📸 Follow on Instagram
+      Follow on Instagram
     </a>
   </div>
 </section>
 
-<!-- ══ LOCATION ══ -->
-<section id="location">
-  <div class="location-wrapper">
-    <div class="loc-info fade-in">
-      <div class="section-label">Find Us</div>
-      <h2 class="section-title">Come <em>Visit</em> Us</h2>
-      <div class="loc-cards">
-        <div class="loc-card">
-          <div class="loc-icon">📍</div>
-          <div>
-            <h4>Address</h4>
-            <p>177, Sachin Plaza, Model Town West<br>G.T. Road, Ghaziabad, UP – 201001</p>
-          </div>
-        </div>
-        <div class="loc-card">
-          <div class="loc-icon">⏰</div>
-          <div>
-            <h4>Opening Hours</h4>
-            <p>Monday – Sunday: 11:00 AM – 11:00 PM<br>Open all 7 days 🎉</p>
-          </div>
-        </div>
-        <div class="loc-card">
-          <div class="loc-icon">📞</div>
-          <div>
-            <h4>Call / WhatsApp</h4>
-            <p><a href="tel:+91XXXXXXXXXX">+91 XXXXX XXXXX</a></p>
-          </div>
-        </div>
-        <div class="loc-card">
-          <div class="loc-icon">🛵</div>
-          <div>
-            <h4>Order Online</h4>
-            <p>
-              <a href="https://www.zomato.com/ncr/three-guys-cafe-lounge-nehru-nagar-ghaziabad" target="_blank">Order on Zomato</a> &nbsp;|&nbsp;
-              <a href="https://www.swiggy.com/city/noida/three-guys-cafe-and-lounge-nehru-nagar-raj-nagar-rest827526" target="_blank">Order on Swiggy</a>
-            </p>
-          </div>
-        </div>
-        <div class="loc-card">
-          <div class="loc-icon">📸</div>
-          <div>
-            <h4>Instagram</h4>
-            <p><a href="https://www.instagram.com/threeguys_cafe_lounge/" target="_blank">@threeguys_cafe_lounge</a></p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="map-embed fade-in">
-      <div class="map-pin">📍</div>
-      <h3>Three Guys Cafe & Lounge</h3>
-      <p>177, Sachin Plaza, Model Town West, G.T. Road, Ghaziabad, UP 201001</p>
-      <a href="https://maps.google.com/?q=Three+Guys+Cafe+Lounge+Ghaziabad+GT+Road" target="_blank" class="map-btn">
-        🗺️ Open in Google Maps
-      </a>
-    </div>
-  </div>
-</section>
+<script>
+  (function() {
+    const grid = document.querySelector('[data-behold-id]');
+    const widgetId = grid.getAttribute('data-behold-id');
+    
+    fetch(`https://behold.so{widgetId}`)
+      .then(res => res.json())
+      .then(posts => {
+        const cards = grid.querySelectorAll('.ipost');
+        posts.slice(0, 6).forEach((post, index) => {
+          if (cards[index]) {
+            // Determines if post is a video or image, picks the best fallback asset link
+            const mediaUrl = post.mediaType === 'VIDEO' ? post.thumbnailUrl : post.mediaUrl;
+            
+            // Injects the live image seamlessly as a background layer behind your overlay text
+            cards[index].style.backgroundImage = `url('${mediaUrl}')`;
+            cards[index].style.backgroundSize = 'cover';
+            cards[index].style.backgroundPosition = 'center';
+            
+            // Turns the entire box into a live clickable link straight to that exact Instagram post
+            cards[index].style.cursor = 'pointer';
+            cards[index].onclick = () => window.open(post.permalink, '_blank');
+          }
+        });
+      })
+      .catch(err => console.error("Instagram feed failed to pull:", err));
+  })();
+</script>
 
 <!-- ══ FOOTER ══ -->
 <footer>
@@ -1499,6 +1518,76 @@ if (phoneInput) {
     e.target.classList.remove('error');
   });
 }
+
+/**
+ * 1. Automatic Space Formatter (Runs in real-time on input)
+ */
+function formatPhoneLive(input) {
+  let value = input.value;
+  const errorContainer = document.getElementById('formError');
+
+  // Strip non-digits but preserve the + sign if they use a country code
+  if (value.startsWith('+91')) {
+    let digits = value.slice(3).replace(/\D/g, ''); 
+    if (digits.length > 5) {
+      value = `+91 ${digits.slice(0, 5)} ${digits.slice(5, 10)}`;
+    } else if (digits.length > 0) {
+      value = `+91 ${digits}`;
+    } else {
+      value = `+91 `;
+    }
+  } else {
+    let digits = value.replace(/\D/g, '');
+    if (digits.length > 5) {
+      value = `${digits.slice(0, 5)} ${digits.slice(5, 10)}`;
+    } else {
+      value = digits;
+    }
+  }
+
+  input.value = value;
+
+  // Real-time error hiding once typing parameters are fixed
+  const cleanDigits = value.replace(/\+91/g, '').replace(/\s/g, '');
+  if (/^[6-9]\d{9}$/.test(cleanDigits) || cleanDigits.length === 0) {
+    errorContainer.style.display = 'none';
+  }
+}
+
+/**
+ * 2. Submission Handler (Integrates directly into your existing onclick hook)
+ */
+function handleReservation() {
+  const phoneField = document.getElementById('phoneNumber');
+  const errorContainer = document.getElementById('formError');
+  
+  // Clean all spacing and prefix characters to read the underlying data values
+  const cleanDigits = phoneField.value.replace(/\+91/g, '').replace(/\s/g, '');
+  
+  // Rule Check: Must start with 6-9 and contain exactly 10 digits
+  const isPhoneValid = /^[6-9]\d{9}$/.test(cleanDigits);
+
+  if (!isPhoneValid) {
+    // Reveal your existing form error container with the warning text
+    errorContainer.textContent = "Please enter a valid, complete 10-digit mobile number starting with 6, 7, 8, or 9.";
+    errorContainer.style.display = 'block';
+    
+    phoneField.focus(); // Jump cursor directly to the field to help the user fix it
+    return; // STOP execution here so booking data does not send to backend
+  }
+
+  // Hide errors if everything looks good
+  errorContainer.style.display = 'none';
+
+  // ═════════════════════════════════════════════════════════════════
+  // YOUR EXISTING SUBMISSION CODE GOES BELOW HERE
+  // ═════════════════════════════════════════════════════════════════
+  alert("Reservation checked successfully! Processing booking...");
+  
+  // Example data construction for your API:
+  // const payload = { phone: cleanDigits, name: document.getElementById('fullName').value };
+}
+
 
 // Remove error highlight from other fields on input
 const otherInputs = document.querySelectorAll('#dateInput, #guests, #timeInput, #occasion');
